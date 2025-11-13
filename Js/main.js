@@ -379,11 +379,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Protect sensitive pages ---
   const protectedPages = ["cart.html", "booking.html"]; // Removed menu.html - users can browse menu without login
   const currentPage = window.location.pathname.split("/").pop();
+
+  // Debug logging
+  console.log("Current page:", currentPage);
+  console.log("localStorage loggedIn:", localStorage.getItem("loggedIn"));
+  console.log("sessionStorage loggedIn:", sessionStorage.getItem("loggedIn"));
+
   if (protectedPages.includes(currentPage)) {
     const loggedIn = localStorage.getItem("loggedIn") === "true";
     const guest = sessionStorage.getItem("loggedIn") === "guest";
 
+    console.log("Login check - loggedIn:", loggedIn, "guest:", guest);
+
     if (!loggedIn && !guest) {
+      console.log("Access denied - redirecting to login");
+
       // Determine where they came from
       if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
       if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
@@ -391,6 +401,9 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please log in to access the cart!");
       localStorage.setItem("loginMessage", "⚠️ Please log in before placing an order!");
       window.location.href = "login.html";
+      return; // Make sure we exit here
+    } else {
+      console.log("Access granted");
     }
   }
 
@@ -398,6 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (currentPage === "menu.html") {
     // Users can browse menu freely - no redirect here
     // Login checks are handled in the Add to Cart button event listeners
+    console.log("Menu page - allowing browsing");
   }
 
   // --- Show pop-up message after redirect ---
