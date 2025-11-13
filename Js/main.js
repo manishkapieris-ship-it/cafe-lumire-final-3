@@ -333,53 +333,6 @@ document.addEventListener("DOMContentLoaded", () => {
    Handles login, guest login, and page protection
 ====================================================== */
 
-  // --- Normal login ---
-  document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.querySelector("#loginForm");
-    if (loginForm) {
-      loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const email = loginForm.querySelector("input[type='email']").value.trim();
-        const password = loginForm.querySelector("input[type='password']").value.trim();
-
-        if (!email || !password) {
-          alert("Please enter your email and password!");
-          return;
-        }
-
-        // Simple fake login - set BOTH localStorage and sessionStorage
-        localStorage.setItem("loggedIn", "true");
-        sessionStorage.setItem("loggedIn", "user");
-        localStorage.removeItem("cameFromMenu");
-        localStorage.removeItem("cameFromReserve");
-        localStorage.removeItem("cameFromCart");
-
-        // Redirect back to where user came from
-        if (localStorage.getItem("cameFromMenu")) {
-          localStorage.removeItem("cameFromMenu");
-          window.location.href = "menu.html";
-        } else if (localStorage.getItem("cameFromReserve")) {
-          localStorage.removeItem("cameFromReserve");
-          window.location.href = "booking.html";
-        } else if (localStorage.getItem("cameFromCart")) {
-          localStorage.removeItem("cameFromCart");
-          window.location.href = "cart.html";
-        } else {
-          window.location.href = "index.html";
-        }
-      });
-    }
-
-  // --- Guest login ---
-  window.guestLogin = function () {
-    sessionStorage.setItem("loggedIn", "guest");
-    const hour = new Date().getHours();
-    const greeting =
-      hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
-    sessionStorage.setItem("greetingMsg", `${greeting}, welcome guest!`);
-    window.location.href = "index.html";
-  };
-
   // --- Protect sensitive pages ---
   const protectedPages = ["cart.html", "booking.html", "menu.html"];
   const currentPage = window.location.pathname.split("/").pop();
@@ -424,5 +377,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
     localStorage.removeItem("loginMessage");
   }
-});
 
