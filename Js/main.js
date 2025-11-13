@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // safely wire buttons (if any)
     coffeeButtons.forEach(btn => {
       addEvent(btn, "click", (e) => {
+        e.preventDefault(); // Prevent any default behavior
+
         // Check if user is logged in before opening modal
         const loggedIn = localStorage.getItem("loggedIn") === "true";
         const guest = sessionStorage.getItem("loggedIn") === "guest";
@@ -148,6 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
   -------------------------*/
   document.querySelectorAll(".menu-card .add-cart:not(.coffee-btn)").forEach(btn => {
     btn.addEventListener("click", (e) => {
+      e.preventDefault(); // Prevent any default behavior
+
       // Check if user is logged in
       const loggedIn = localStorage.getItem("loggedIn") === "true";
       const guest = sessionStorage.getItem("loggedIn") === "guest";
