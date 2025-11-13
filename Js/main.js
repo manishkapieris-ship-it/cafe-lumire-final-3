@@ -121,6 +121,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Confirm and push to localStorage
     if (confirmBtn) confirmBtn.addEventListener("click", () => {
+      // Double-check login before adding to cart
+      const loggedIn = localStorage.getItem("loggedIn") === "true";
+      const guest = sessionStorage.getItem("loggedIn") === "guest";
+
+      if (!loggedIn && !guest) {
+        alert("Please log in to add items to cart!");
+        modal.style.display = "none";
+        localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
+        window.location.href = "login.html";
+        return;
+      }
+
       const name = (modalTitle?.textContent || "Coffee").replace("Customize Your ", "");
       const img = modalImg?.src || "";
       const totalText = (totalPriceEl?.textContent || "$0").replace("$","");
