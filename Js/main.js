@@ -394,6 +394,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // --- Allow menu browsing but protect cart access ---
+  if (currentPage === "menu.html") {
+    // Users can browse menu freely - no redirect here
+    // Login checks are handled in the Add to Cart button event listeners
+  }
+
   // --- Show pop-up message after redirect ---
   const msgText = localStorage.getItem("loginMessage");
   if (msgText) {
