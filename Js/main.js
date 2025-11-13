@@ -376,6 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
       if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
 
+      alert("Please log in to access the cart!");
       localStorage.setItem("loginMessage", "⚠️ Please log in before placing an order!");
       window.location.href = "login.html";
     }
