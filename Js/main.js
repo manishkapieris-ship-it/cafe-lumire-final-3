@@ -323,35 +323,10 @@ document.addEventListener("DOMContentLoaded", () => {
 }); // DOMContentLoaded end
 
 
-// Handle login
-document.querySelector("#loginForm").addEventListener("submit", function(e) {
-  e.preventDefault(); // prevent page refresh
-  const email = this.querySelector("input[type='email']").value.trim();
-  const password = this.querySelector("input[type='password']").value.trim();
-
-  if (!email || !password) {
-    alert("Please enter email and password!");
-    return;
-  }
-
-  // Basic login simulation
-  if (email === "admin@example.com" && password === "1234") {
-    alert("Login successful!");
-    window.location.href = "home.html"; // redirect to your site
-  } else {
-    alert("Invalid email or password!");
-  }
-});
+// Handle login - REMOVED: This is now handled in the DOMContentLoaded section above
 
 
-function guestLogin() {
-  // mark user as guest
-  localStorage.setItem("loggedIn", "guest");
-  localStorage.setItem("loginMessage", "Welcome, guest! You can browse and order freely.");
-  
-  // redirect to homepage or menu
-  window.location.href = "index.html"; 
-}
+// REMOVED: guestLogin function - now handled in login.html
 
 /* ======================================================
    🔒 LOGIN + ACCESS CONTROL LOGIC
@@ -372,7 +347,8 @@ function guestLogin() {
           return;
         }
 
-        // Simple fake login - use sessionStorage for consistency
+        // Simple fake login - set BOTH localStorage and sessionStorage
+        localStorage.setItem("loggedIn", "true");
         sessionStorage.setItem("loggedIn", "user");
         localStorage.removeItem("cameFromMenu");
         localStorage.removeItem("cameFromReserve");
