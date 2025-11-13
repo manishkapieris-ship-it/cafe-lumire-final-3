@@ -405,7 +405,7 @@ function guestLogin() {
   };
 
   // --- Protect sensitive pages ---
-  const protectedPages = ["cart.html", "booking.html"];
+  const protectedPages = ["cart.html", "booking.html", "menu.html"];
   const currentPage = window.location.pathname.split("/").pop();
   if (protectedPages.includes(currentPage)) {
     const loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -415,6 +415,7 @@ function guestLogin() {
       // Determine where they came from
       if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
       if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
+      if (currentPage === "menu.html") localStorage.setItem("cameFromMenu", "true");
 
       localStorage.setItem("loginMessage", "⚠️ Please log in before placing an order!");
       window.location.href = "login.html";

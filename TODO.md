@@ -5,6 +5,7 @@
 - [x] Remove redundant inline script from menu.html that interferes with Add to Cart
 - [x] Remove redundant inline script from cart.html that interferes with checkout
 - [x] Fix case-sensitive file path issue for GitHub Pages deployment
+- [x] Fix login persistence issue - menu.html now properly protected
 
 ## What Was Fixed:
 
@@ -24,6 +25,13 @@ Fixed all JavaScript file references in:
 - cart.html: Changed `js/main.js` → `Js/main.js`
 - booking.html: Changed `js/main.js` → `Js/main.js`
 
+### Problem 3: Login Persistence Issue
+When logging in with email/password, the user was redirected to index.html but clicking "Menu" would redirect back to login.html because menu.html wasn't included in the protected pages list.
+
+**Solution:**
+1. **login.html**: Added `localStorage.setItem("loggedIn", "true")` to persist login state
+2. **Js/main.js**: Added "menu.html" to the protected pages array so it's properly protected
+
 ### How It Works Now:
 - Login protection is still active via the `<script>` block in the `<head>` section of pages
 - The main.js file now handles all Add to Cart functionality without interference:
@@ -32,11 +40,12 @@ Fixed all JavaScript file references in:
   - Items are properly stored in localStorage
   - Toast notifications appear when items are added
 - JavaScript now loads correctly on both local server AND GitHub Pages
+- Login state persists properly across page navigation
 
 ## Testing Instructions:
 
-1. Open `login.html` and log in (or use guest login)
-2. Navigate to `menu.html`
+1. Open `login.html` and log in with email: `admin@example.com` and password: `1234`
+2. Navigate to `menu.html` - should work without redirecting to login
 3. Test Coffee Items:
    - Click "Add to Cart" on any coffee item
    - Customization modal should appear
@@ -57,7 +66,8 @@ Fixed all JavaScript file references in:
 - menu.html (removed conflicting inline script + fixed JS path)
 - cart.html (removed conflicting inline script + fixed JS path)
 - booking.html (fixed JS path)
-- Js/main.js (no changes needed - already working correctly)
+- login.html (fixed login persistence)
+- Js/main.js (added menu.html to protected pages)
 
 ## Deployment Note:
 The site should now work correctly on both:
