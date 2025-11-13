@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     coffeeButtons.forEach(btn => {
       addEvent(btn, "click", (e) => {
         e.preventDefault(); // Prevent any default behavior
+        e.stopPropagation(); // Stop event bubbling
 
         // Check if user is logged in before opening modal
         const loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -42,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!loggedIn && !guest) {
           // Redirect to login if not authenticated
+          alert("Please log in to add items to cart!");
           localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
           window.location.href = "login.html";
           return;
@@ -151,6 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".menu-card .add-cart:not(.coffee-btn)").forEach(btn => {
     btn.addEventListener("click", (e) => {
       e.preventDefault(); // Prevent any default behavior
+      e.stopPropagation(); // Stop event bubbling
 
       // Check if user is logged in
       const loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -158,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!loggedIn && !guest) {
         // Redirect to login if not authenticated
+        alert("Please log in to add items to cart!");
         localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
         window.location.href = "login.html";
         return;
