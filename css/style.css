@@ -834,6 +834,23 @@ body {
   border-radius: 10px;
 }
 
+/* Mobile image optimization */
+@media (max-width: 768px) {
+  .menu-card img {
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-card img {
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+}
+
 .menu-card h3 {
   margin-top: 10px;
   color: #f8e8d0;
