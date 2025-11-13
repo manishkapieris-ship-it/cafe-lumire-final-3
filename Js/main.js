@@ -34,6 +34,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // safely wire buttons (if any)
     coffeeButtons.forEach(btn => {
       addEvent(btn, "click", (e) => {
+        // Check if user is logged in before opening modal
+        const loggedIn = localStorage.getItem("loggedIn") === "true";
+        const guest = sessionStorage.getItem("loggedIn") === "guest";
+
+        if (!loggedIn && !guest) {
+          // Redirect to login if not authenticated
+          localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
+          window.location.href = "login.html";
+          return;
+        }
+
         const card = e.target.closest(".menu-card");
         if (!card) return;
         const name = card.dataset.name || "Coffee";
@@ -133,10 +144,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   
   /* -------------------------
-    Add-to-cart for Bakery items (simple)
+    Add-to-cart for Bakery items (simple) - with login check
   -------------------------*/
   document.querySelectorAll(".menu-card .add-cart:not(.coffee-btn)").forEach(btn => {
     btn.addEventListener("click", (e) => {
+      // Check if user is logged in
+      const loggedIn = localStorage.getItem("loggedIn") === "true";
+      const guest = sessionStorage.getItem("loggedIn") === "guest";
+
+      if (!loggedIn && !guest) {
+        // Redirect to login if not authenticated
+        localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Proceed with adding to cart
       const card = e.target.closest(".menu-card");
       const name = card.dataset.name || card.querySelector("h3")?.textContent || "Item";
       const img = card.dataset.img || card.querySelector("img")?.src || "";
