@@ -834,10 +834,11 @@ body {
   border-radius: 10px;
 }
 
-/* Mobile image optimization */
+/* Mobile image optimization - Square full images */
 @media (max-width: 768px) {
   .menu-card img {
-    height: 50px;
+    height: 120px;
+    width: 120px;
     object-fit: cover;
     border-radius: 8px;
   }
@@ -845,7 +846,8 @@ body {
 
 @media (max-width: 480px) {
   .menu-card img {
-    height: 45px;
+    height: 100px;
+    width: 100px;
     object-fit: cover;
     border-radius: 6px;
   }
