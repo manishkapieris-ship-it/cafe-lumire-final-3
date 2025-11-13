@@ -104,29 +104,6 @@
 
   <div id="toast" class="toast">Message</div>
 
-
-  <script>
-    // ✅ Only check login when confirming order, not on page load
-    document.addEventListener("DOMContentLoaded", () => {
-      const confirmBtn = document.getElementById("confirm-order");
-
-      confirmBtn.addEventListener("click", (e) => {
-        const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-        const isGuest = sessionStorage.getItem("loggedIn") === "guest";
-
-        if (!isLoggedIn && !isGuest) {
-          e.preventDefault();
-          localStorage.setItem("loginMessage", "⚠️ Please log in before placing an order.");
-          localStorage.setItem("cameFromMenu", "true");
-          window.location.href = "login.html";
-          return;
-        }
-
-        // else, continue with normal behavior from main.js
-      });
-    });
-  </script>
-
-<script src="js/main.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

@@ -236,27 +236,5 @@
 
   <script src="js/main.js"></script>
 
-  <script>
-    // ✅ Allow browsing without login
-    // Redirect only when clicking Add to Cart and not logged in
-    document.addEventListener("DOMContentLoaded", () => {
-      const cartButtons = document.querySelectorAll(".add-cart");
-
-      cartButtons.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-          const isGuest = sessionStorage.getItem("loggedIn") === "guest";
-
-          if (!isLoggedIn && !isGuest) {
-            e.preventDefault();
-            localStorage.setItem("loginMessage", "⚠️ Please log in before placing an order.");
-            localStorage.setItem("cameFromMenu", "true");
-            window.location.href = "login.html";
-            return;
-          }
-        });
-      });
-    });
-  </script>
 </body>
 </html>
