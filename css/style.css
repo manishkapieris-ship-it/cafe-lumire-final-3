@@ -834,22 +834,32 @@ body {
   border-radius: 10px;
 }
 
-/* Mobile image optimization - Square full images */
+/* Mobile image optimization - Square full images like About page */
 @media (max-width: 768px) {
+  .menu-card {
+    width: 200px;
+    padding: 12px;
+  }
   .menu-card img {
-    height: 180px;
-    width: 100px;
+    height: 120px;
+    width: 120px;
     object-fit: cover;
     border-radius: 8px;
+    margin: 0 auto;
   }
 }
 
 @media (max-width: 480px) {
+  .menu-card {
+    width: 180px;
+    padding: 10px;
+  }
   .menu-card img {
-    height: 180px;
+    height: 100px;
     width: 100px;
     object-fit: cover;
     border-radius: 6px;
+    margin: 0 auto;
   }
 }
 
