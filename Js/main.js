@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // safely wire buttons (if any)
     coffeeButtons.forEach(btn => {
       addEvent(btn, "click", (e) => {
+        console.log("Coffee button clicked!");
         e.preventDefault(); // Prevent any default behavior
         e.stopPropagation(); // Stop event bubbling
 
@@ -41,21 +42,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const loggedIn = localStorage.getItem("loggedIn") === "true";
         const guest = sessionStorage.getItem("loggedIn") === "guest";
 
+        console.log("Login check for coffee - loggedIn:", loggedIn, "guest:", guest);
+
         if (!loggedIn && !guest) {
           // Redirect to login if not authenticated
+          console.log("Not logged in - redirecting to login");
           alert("Please log in to add items to cart!");
           localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
+          localStorage.setItem("cameFromMenu", "true");
           window.location.href = "login.html";
           return;
         }
 
+        console.log("Logged in - opening modal");
         const card = e.target.closest(".menu-card");
-        if (!card) return;
+        if (!card) {
+          console.log("No card found");
+          return;
+        }
         const name = card.dataset.name || "Coffee";
         const img = card.dataset.img || card.querySelector("img")?.src || "";
         basePrice = (parseFloat(card.dataset.price) || 0) / 100; // dollars
         selectedSize = "M";
 
+        console.log("Opening modal for:", name, "price:", card.dataset.price);
         modalTitle.textContent = `Customize Your ${name}`;
         modalImg.src = img;
         // reset counts in modal
@@ -164,6 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
   -------------------------*/
   document.querySelectorAll(".menu-card .add-cart:not(.coffee-btn)").forEach(btn => {
     btn.addEventListener("click", (e) => {
+      console.log("Bakery button clicked!");
       e.preventDefault(); // Prevent any default behavior
       e.stopPropagation(); // Stop event bubbling
 
@@ -171,19 +182,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const loggedIn = localStorage.getItem("loggedIn") === "true";
       const guest = sessionStorage.getItem("loggedIn") === "guest";
 
+      console.log("Login check for bakery - loggedIn:", loggedIn, "guest:", guest);
+
       if (!loggedIn && !guest) {
         // Redirect to login if not authenticated
+        console.log("Not logged in - redirecting to login");
         alert("Please log in to add items to cart!");
         localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
+        localStorage.setItem("cameFromMenu", "true");
         window.location.href = "login.html";
         return;
       }
 
+      console.log("Logged in - adding to cart");
       // Proceed with adding to cart
       const card = e.target.closest(".menu-card");
       const name = card.dataset.name || card.querySelector("h3")?.textContent || "Item";
       const img = card.dataset.img || card.querySelector("img")?.src || "";
       const priceRs = Math.round((parseFloat(card.dataset.price)||0));
+
+      console.log("Adding to cart:", name, "price:", priceRs);
       let cart = JSON.parse(localStorage.getItem("cart")||"[]");
       const existing = cart.find(i => i.name === name);
       if (existing) existing.quantity = (existing.quantity||0) + 1;
