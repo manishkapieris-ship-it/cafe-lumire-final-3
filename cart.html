@@ -5,20 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Café Lumière — Cart</title>
   <link rel="stylesheet" href="css/style.css" />
-
-  <script>
-  // block actions unless logged in
-  const loggedIn = localStorage.getItem("loggedIn") === "true";
-  const guestLogged = sessionStorage.getItem("loggedIn") === "guest";
-
-  // if not logged in or guest, go to login page with message
-  if (!loggedIn && !guestLogged) {
-    localStorage.setItem("loginMessage", "⚠️ Please log in before placing an order.");
-    localStorage.setItem("cameFromMenu", window.location.pathname.includes("menu") ? "true" : "");
-    localStorage.setItem("cameFromReserve", window.location.pathname.includes("booking") ? "true" : "");
-    window.location.href = "login.html";
-  }
-</script>
 </head>
 <body>
 

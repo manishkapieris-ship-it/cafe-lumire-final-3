@@ -387,21 +387,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 6000);
   }
 
-}); // DOMContentLoaded end
-
-
-// Handle login - REMOVED: This is now handled in the DOMContentLoaded section above
-
-
-// REMOVED: guestLogin function - now handled in login.html
-
-/* ======================================================
-   🔒 LOGIN + ACCESS CONTROL LOGIC
-   Handles login, guest login, and page protection
-====================================================== */
+  /* ======================================================
+     🔒 LOGIN + ACCESS CONTROL LOGIC
+     Handles login, guest login, and page protection
+  ====================================================== */
 
   // --- Protect sensitive pages ---
-  const protectedPages = ["cart.html", "booking.html"]; // Removed menu.html - users can browse menu without login
+  const protectedPages = ["cart.html", "booking.html"];
   const currentPage = window.location.pathname.split("/").pop();
 
   // Debug logging
@@ -422,10 +414,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
       if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
 
-      alert("Please log in to access the cart!");
-      localStorage.setItem("loginMessage", "⚠️ Please log in before placing an order!");
+      alert("Please log in to access this page!");
+      localStorage.setItem("loginMessage", "⚠️ Please log in!");
       window.location.href = "login.html";
-      return; // Make sure we exit here
+      return;
     } else {
       console.log("Access granted");
     }
@@ -433,8 +425,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Allow menu browsing but protect cart access ---
   if (currentPage === "menu.html") {
-    // Users can browse menu freely - no redirect here
-    // Login checks are handled in the Add to Cart button event listeners
     console.log("Menu page - allowing browsing");
   }
 
@@ -464,4 +454,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 3000);
     localStorage.removeItem("loginMessage");
   }
+
+}); // DOMContentLoaded end
 
