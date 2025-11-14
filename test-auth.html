@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Authentication</title>
+  <style>
+    body {
+      background: #0e0d0c;
+      color: #fff;
+      font-family: Poppins, sans-serif;
+      padding: 40px;
+      text-align: center;
+    }
+    .button {
+      padding: 12px 24px;
+      margin: 10px;
+      background: #00ff66;
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .button:hover {
+      background: #00cc55;
+    }
+    .info {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Authentication Test</h1>
+  
+  <div class="info">
+    <h3>Storage Status:</h3>
+    <p><strong>localStorage.loggedIn:</strong> <span id="locStorage">Not set</span></p>
+    <p><strong>sessionStorage.loggedIn:</strong> <span id="sesStorage">Not set</span></p>
+  </div>
+
+  <div>
+    <button class="button" onclick="clearAll()">🗑️ Clear All Storage</button>
+    <button class="button" onclick="testLogin()">✅ Simulate Login</button>
+    <button class="button" onclick="testGuest()">👤 Simulate Guest</button>
+  </div>
+
+  <div class="info">
+    <h3>Test Actions:</h3>
+    <button class="button" onclick="window.location.href='menu.html'">Go to Menu (Requires Auth)</button>
+    <button class="button" onclick="window.location.href='login.html'">Go to Login</button>
+  </div>
+
+  <script>
+    function updateStatus() {
+      document.getElementById("locStorage").textContent = localStorage.getItem("loggedIn") || "Not set";
+      document.getElementById("sesStorage").textContent = sessionStorage.getItem("loggedIn") || "Not set";
+    }
+
+    function clearAll() {
+      localStorage.clear();
+      sessionStorage.clear();
+      console.log("✅ All storage cleared!");
+      updateStatus();
+      alert("✅ Storage cleared! Try visiting menu.html now.");
+    }
+
+    function testLogin() {
+      localStorage.setItem("loggedIn", "true");
+      sessionStorage.setItem("loggedIn", "user");
+      sessionStorage.setItem("userName", "Test User");
+      console.log("✅ Login simulated!");
+      updateStatus();
+      alert("✅ Login simulated! Storage updated.");
+    }
+
+    function testGuest() {
+      localStorage.setItem("loggedIn", "true");
+      sessionStorage.setItem("loggedIn", "guest");
+      sessionStorage.setItem("guestName", "Test Guest");
+      console.log("✅ Guest login simulated!");
+      updateStatus();
+      alert("✅ Guest login simulated! Storage updated.");
+    }
+
+    // Initial check
+    updateStatus();
+  </script>
+</body>
+</html>

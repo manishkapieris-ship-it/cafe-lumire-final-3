@@ -8,12 +8,19 @@
   <script>
     // Check authentication before page loads
     (function() {
-      const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-      const isGuest = sessionStorage.getItem("loggedIn") === "guest";
-      const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
-      
-      if (!isLoggedIn && !isGuest && !socialLogin) {
-        window.location.href = "login.html";
+      try {
+        const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+        const isGuest = sessionStorage.getItem("loggedIn") === "guest";
+        const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
+        
+        console.log("Auth check - loggedIn:", isLoggedIn, "guest:", isGuest, "social:", socialLogin);
+        
+        if (!isLoggedIn && !isGuest && !socialLogin) {
+          console.log("Not authenticated. Redirecting to login.");
+          window.location.replace("login.html");
+        }
+      } catch(e) {
+        console.error("Auth check error:", e);
       }
     })();
   </script>

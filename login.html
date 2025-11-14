@@ -242,6 +242,45 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
+    .toggle-text {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .toggle-text a {
+      color: #00ff66;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .toggle-text a:hover {
+      text-decoration: underline;
+    }
+
+    .forgot-content button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #00ff66;
+      color: #111;
+      border: none;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .forgot-content button:hover {
+      background: #00cc55;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
   </style>
 </head>
 
