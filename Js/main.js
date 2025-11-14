@@ -1,4 +1,4 @@
-cop// main.js - unified behavior for menu/cart/checkout
+// main.js - unified behavior for menu/cart/checkout
 console.log("JS connected properly!");
 console.log("DOM ready state:", document.readyState);
 console.log("Window location:", window.location.href);
@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
   -------------------------*/
   const modal = document.getElementById("coffeeModal");
   const toastEl = document.getElementById("toast");
+  
+  // Safety check: if modal doesn't exist, this is not the menu page
+  if (!modal) {
+    console.log("Modal not found - not on menu page");
+  }
   if (modal) {
     const coffeeButtons = document.querySelectorAll(".coffee-btn");
     const closeBtn = modal.querySelector(".close");
