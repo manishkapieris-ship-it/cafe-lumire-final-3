@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 Auth Debug Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(0, 255, 100, 0.05);
+      border: 2px solid #00ff66;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 30px rgba(0, 255, 100, 0.2);
+    }
+    
+    h1 {
+      color: #00ff66;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+    }
+    
+    .subtitle {
+      color: #aaa;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+    }
+    
+    .section {
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 4px solid #00ff66;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    .section h2 {
+      color: #00ff66;
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+    
+    .storage-display {
+      background: #111;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      margin: 10px 0;
+      word-break: break-all;
+    }
+    
+    .key {
+      color: #00ff66;
+      font-weight: bold;
+    }
+    
+    .value {
+      color: #aaa;
+    }
+    
+    .empty {
+      color: #ff6666;
+      font-style: italic;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    
+    button {
+      padding: 12px 24px;
+      background: #00ff66;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1em;
+      transition: all 0.3s;
+    }
+    
+    button:hover {
+      background: #00dd55;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 100, 0.3);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .button-secondary {
+      background: #666;
+      color: #fff;
+    }
+    
+    .button-secondary:hover {
+      background: #777;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    .status.ok {
+      background: #00ff66;
+      color: #000;
+    }
+    
+    .status.error {
+      background: #ff6666;
+      color: #fff;
+    }
+    
+    .info {
+      background: #004400;
+      border-left: 4px solid #00ff66;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 6px;
+    }
+    
+    .steps {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .steps li {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0, 255, 100, 0.2);
+    }
+    
+    .steps li:last-child {
+      border-bottom: none;
+    }
+    
+    .steps li:before {
+      content: "→ ";
+      color: #00ff66;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 255, 100, 0.2);
+      font-size: 0.9em;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Authentication Debug Test</h1>
+    <p class="subtitle">Check and simulate your authentication</p>
+    
+    <!-- Storage Status -->
+    <div class="section">
+      <h2>📊 Storage Status</h2>
+      <div class="storage-display">
+        <div>
+          <span class="key">localStorage.loggedIn:</span>
+          <span id="ls-logged" class="value">Checking...</span>
+        </div>
+        <div>
+          <span class="key">sessionStorage.loggedIn:</span>
+          <span id="ss-user" class="value">Checking...</span>
+        </div>
+        <div>
+          <span class="key">sessionStorage.userName:</span>
+          <span id="ss-name" class="value">Checking...</span>
+        </div>
+      </div>
+      
+      <h3 style="color: #00ff66; margin-top: 20px; margin-bottom: 10px;">Auth Status:</h3>
+      <div id="auth-status" class="status error">NOT AUTHENTICATED ❌</div>
+    </div>
+    
+    <!-- Actions -->
+    <div class="section">
+      <h2>⚙️ Actions</h2>
+      
+      <h3 style="color: #00ff66; margin-bottom: 15px;">Clear Storage:</h3>
+      <div class="buttons">
+        <button onclick="clearAll()">🗑️ Clear All Storage</button>
+        <button class="button-secondary" onclick="clearLocalStorage()">Clear localStorage Only</button>
+        <button class="button-secondary" onclick="clearSessionStorage()">Clear sessionStorage Only</button>
+      </div>
+      
+      <h3 style="color: #00ff66; margin: 25px 0 15px 0;">Simulate Login:</h3>
+      <div class="buttons">
+        <button onclick="simulateLogin('user')">✅ Simulate Email Login</button>
+        <button onclick="simulateLogin('guest')">👤 Simulate Guest Login</button>
+        <button onclick="simulateLogin('google')">🔗 Simulate Google Login</button>
+      </div>
+      
+      <h3 style="color: #00ff66; margin: 25px 0 15px 0;">Test Pages:</h3>
+      <div class="buttons">
+        <button class="button-secondary" onclick="testPage('menu.html')">📋 Test Menu (Requires Auth)</button>
+        <button class="button-secondary" onclick="testPage('home.html')">🏠 Test Home (Requires Auth)</button>
+        <button class="button-secondary" onclick="testPage('login.html')">🔐 Go to Login</button>
+      </div>
+    </div>
+    
+    <!-- Auth Check -->
+    <div class="section">
+      <h2>✓ Auth Check Results</h2>
+      <div id="auth-details">
+        <p>Checking authentication...</p>
+      </div>
+      <div class="info">
+        <strong>ℹ️ How it works:</strong><br>
+        Each page checks: localStorage.loggedIn = "true" AND sessionStorage.loggedIn = valid user type<br>
+        If BOTH are not set, the page redirects to login.html
+      </div>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="section">
+      <h2>📝 Test Instructions</h2>
+      <ol class="steps">
+        <li><strong>Click "Clear All Storage"</strong> to start fresh</li>
+        <li><strong>Click "Test Menu"</strong> - Should redirect to login.html ❌</li>
+        <li><strong>Click "Simulate Email Login"</strong> to set storage</li>
+        <li><strong>Click "Test Menu"</strong> again - Should load menu.html ✅</li>
+        <li><strong>Refresh page</strong> - You'll see storage is still set</li>
+        <li><strong>Close browser completely</strong> - sessionStorage will clear</li>
+        <li><strong>Reopen browser</strong> and open this page - sessionStorage empty</li>
+        <li><strong>Click "Test Menu"</strong> - Should redirect again ❌</li>
+      </ol>
+    </div>
+    
+    <div class="footer">
+      <p>🔐 Authentication System | Debug & Test Page</p>
+      <p style="margin-top: 10px; color: #666;">Use this page to verify your authentication setup</p>
+    </div>
+  </div>
+
+  <script>
+    function updateStatus() {
+      const ls = localStorage.getItem("loggedIn");
+      const ss = sessionStorage.getItem("loggedIn");
+      const name = sessionStorage.getItem("userName");
+      
+      // Display current values
+      document.getElementById("ls-logged").textContent = ls || "<span class='empty'>Not set</span>";
+      document.getElementById("ss-user").textContent = ss || "<span class='empty'>Not set</span>";
+      document.getElementById("ss-name").textContent = name || "<span class='empty'>Not set</span>";
+      
+      // Check authentication status
+      const isAuth = ls === "true" && ss && ["user", "guest", "google", "facebook", "twitter"].includes(ss);
+      const statusEl = document.getElementById("auth-status");
+      
+      if (isAuth) {
+        statusEl.textContent = "✅ AUTHENTICATED";
+        statusEl.className = "status ok";
+        document.getElementById("auth-details").innerHTML = `
+          <div style="color: #00ff66; font-weight: bold;">✅ User is authenticated</div>
+          <p style="margin-top: 10px;">
+            <strong>User Type:</strong> ${ss}<br>
+            <strong>User Name:</strong> ${name || 'N/A'}<br>
+            <strong>Status:</strong> Can access all pages
+          </p>
+        `;
+      } else {
+        statusEl.textContent = "❌ NOT AUTHENTICATED";
+        statusEl.className = "status error";
+        document.getElementById("auth-details").innerHTML = `
+          <div style="color: #ff6666; font-weight: bold;">❌ User is NOT authenticated</div>
+          <p style="margin-top: 10px;">
+            Missing requirements:<br>
+            ${!ls ? "❌ localStorage.loggedIn not set<br>" : ""}
+            ${!ss ? "❌ sessionStorage.loggedIn not set<br>" : ""}
+            <br>
+            <strong>Result:</strong> Pages will redirect to login.html
+          </p>
+        `;
+      }
+    }
+    
+    function clearAll() {
+      localStorage.clear();
+      sessionStorage.clear();
+      console.log("✅ All storage cleared!");
+      updateStatus();
+      alert("✅ All storage cleared!\n\nTry visiting menu.html now - it should redirect to login.html");
+    }
+    
+    function clearLocalStorage() {
+      localStorage.clear();
+      console.log("✅ localStorage cleared!");
+      updateStatus();
+      alert("✅ localStorage cleared!");
+    }
+    
+    function clearSessionStorage() {
+      sessionStorage.clear();
+      console.log("✅ sessionStorage cleared!");
+      updateStatus();
+      alert("✅ sessionStorage cleared!");
+    }
+    
+    function simulateLogin(type) {
+      localStorage.setItem("loggedIn", "true");
+      
+      if (type === "user") {
+        sessionStorage.setItem("loggedIn", "user");
+        sessionStorage.setItem("userName", "admin@example.com");
+      } else if (type === "guest") {
+        sessionStorage.setItem("loggedIn", "guest");
+        sessionStorage.setItem("guestName", "Test Guest");
+      } else if (type === "google") {
+        sessionStorage.setItem("loggedIn", "google");
+        sessionStorage.setItem("userName", "Test Google User");
+      }
+      
+      console.log(`✅ ${type} login simulated!`);
+      updateStatus();
+      alert(`✅ ${type.toUpperCase()} login simulated!\n\nNow try clicking "Test Menu" - it should load!`);
+    }
+    
+    function testPage(page) {
+      const ls = localStorage.getItem("loggedIn");
+      const ss = sessionStorage.getItem("loggedIn");
+      
+      if (page !== "login.html" && (ls !== "true" || !ss)) {
+        alert("⚠️ Not authenticated!\n\nYou will be redirected to login.html\n\n(This is the expected behavior)");
+      }
+      
+      console.log(`Opening ${page}...`);
+      window.location.href = page;
+    }
+    
+    // Initial status check
+    updateStatus();
+    
+    // Auto-update every 2 seconds (for cross-tab updates)
+    setInterval(updateStatus, 2000);
+  </script>
+</body>
+</html>

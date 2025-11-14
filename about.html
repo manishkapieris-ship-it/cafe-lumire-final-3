@@ -3,26 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>About | Café Lumière</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
-    // Check authentication before page loads
-    (function() {
-      try {
-        const isLoggedIn = localStorage.getItem("loggedIn") === "true";
-        const isGuest = sessionStorage.getItem("loggedIn") === "guest";
-        const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
-        
-        console.log("Auth check - loggedIn:", isLoggedIn, "guest:", isGuest, "social:", socialLogin);
-        
-        if (!isLoggedIn && !isGuest && !socialLogin) {
-          console.log("Not authenticated. Redirecting to login.");
-          window.location.replace("login.html");
-        }
-      } catch(e) {
-        console.error("Auth check error:", e);
-      }
-    })();
+    // FORCE CHECK - Run immediately before anything else
+    var loggedIn = localStorage.getItem("loggedIn");
+    var sessionUser = sessionStorage.getItem("loggedIn");
+    
+    console.log("ABOUT AUTH CHECK - localStorage:", loggedIn, "sessionStorage:", sessionUser);
+    
+    // Redirect if not authenticated
+    if (loggedIn !== "true" && sessionUser !== "guest" && sessionUser !== "google" && sessionUser !== "facebook" && sessionUser !== "twitter") {
+      console.log("ABOUT - NOT AUTHENTICATED - REDIRECTING TO LOGIN");
+      window.location.href = "login.html";
+    }
   </script>
   <style>
     /* Basic setup */
