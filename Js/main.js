@@ -2,6 +2,122 @@
 console.log("JS connected properly!");
 console.log("DOM ready state:", document.readyState);
 console.log("Window location:", window.location.href);
+
+/* ======================================================
+   LOGIN REQUIRED MODAL
+====================================================== */
+function showLoginRequiredModal(onConfirm) {
+  // Create modal overlay
+  const overlay = document.createElement("div");
+  overlay.id = "login-required-overlay";
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  `;
+
+  // Create modal content
+  const modal = document.createElement("div");
+  modal.style.cssText = `
+    background: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.9));
+    border: 2px solid #00ff66;
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 0 30px rgba(0,255,100,0.5);
+    backdrop-filter: blur(10px);
+  `;
+
+  modal.innerHTML = `
+    <h2 style="color: #00ff66; margin-top: 0; font-size: 24px;">🔐 Login Required</h2>
+    <p style="color: #ccc; font-size: 16px; line-height: 1.6; margin: 20px 0;">
+      Before you can order, you must first <strong style="color: #00ff66;">log in</strong> or 
+      <strong style="color: #00ff66;">continue as a guest</strong>.
+    </p>
+    <p style="color: #aaa; font-size: 14px; margin: 20px 0;">
+      ✅ Choose a login method below or create a new account.
+    </p>
+    <div style="margin-top: 30px; display: flex; gap: 10px; justify-content: center;">
+      <button id="btn-login" style="
+        background: #00ff66;
+        color: #000;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 15px;
+        transition: all 0.3s;
+      ">Proceed to Login</button>
+      <button id="btn-close" style="
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 1px solid #00ff66;
+        padding: 12px 28px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 15px;
+        transition: all 0.3s;
+      ">Cancel</button>
+    </div>
+  `;
+
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  // Add hover effects
+  const loginBtn = modal.querySelector("#btn-login");
+  const closeBtn = modal.querySelector("#btn-close");
+
+  loginBtn.onmouseover = () => {
+    loginBtn.style.background = "#00dd55";
+    loginBtn.style.transform = "scale(1.05)";
+  };
+  loginBtn.onmouseout = () => {
+    loginBtn.style.background = "#00ff66";
+    loginBtn.style.transform = "scale(1)";
+  };
+
+  closeBtn.onmouseover = () => {
+    closeBtn.style.background = "rgba(255,255,255,0.2)";
+    closeBtn.style.transform = "scale(1.05)";
+  };
+  closeBtn.onmouseout = () => {
+    closeBtn.style.background = "rgba(255,255,255,0.1)";
+    closeBtn.style.transform = "scale(1)";
+  };
+
+  // Button handlers
+  loginBtn.onclick = () => {
+    overlay.remove();
+    if (onConfirm) onConfirm();
+  };
+
+  closeBtn.onclick = () => {
+    overlay.remove();
+  };
+
+  // Close on escape key
+  const handleEscape = (e) => {
+    if (e.key === "Escape") {
+      overlay.remove();
+      document.removeEventListener("keydown", handleEscape);
+    }
+  };
+  document.addEventListener("keydown", handleEscape);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   /* -------------------------
     COFFEE MODAL (only for coffee series)
@@ -54,10 +170,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!loggedIn && !guest && !socialLogin) {
           // Redirect to login if not authenticated
           console.log("Not logged in - redirecting to login");
-          alert("Please log in or continue as guest to add items to cart!");
-          localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
-          localStorage.setItem("cameFromMenu", "true");
-          window.location.href = "login.html";
+          
+          // Show login required message
+          showLoginRequiredModal(() => {
+            localStorage.setItem("cameFromMenu", "true");
+            window.location.href = "login.html";
+          });
           return;
         }
 
@@ -147,7 +265,11 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Please log in or continue as guest to add items to cart!");
         modal.style.display = "none";
         localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
-        window.location.href = "login.html";
+        
+        // Show login required message
+        showLoginRequiredModal(() => {
+          window.location.href = "login.html";
+        });
         return;
       }
 
@@ -196,10 +318,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!loggedIn && !guest && !socialLogin) {
         // Redirect to login if not authenticated
         console.log("Not logged in - redirecting to login");
-        alert("Please log in or continue as guest to add items to cart!");
-        localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
-        localStorage.setItem("cameFromMenu", "true");
-        window.location.href = "login.html";
+        
+        // Show login required message
+        showLoginRequiredModal(() => {
+          localStorage.setItem("cameFromMenu", "true");
+          window.location.href = "login.html";
+        });
         return;
       }
 
