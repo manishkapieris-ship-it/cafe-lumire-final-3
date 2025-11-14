@@ -355,7 +355,20 @@
     sessionStorage.setItem("guestName", name);
     sessionStorage.setItem("guestGender", gender);
     showPopup(`Welcome ${gender === "female" ? "Miss" : "Mr"} ${name}!`);
-    setTimeout(()=> window.location.href = "index.html", 1200);
+
+    // Check if user came from menu/cart and redirect accordingly
+    const cameFromMenu = localStorage.getItem("cameFromMenu");
+    const cameFromCart = localStorage.getItem("cameFromCart");
+
+    if (cameFromCart) {
+      localStorage.removeItem("cameFromCart");
+      setTimeout(()=> window.location.href = "cart.html", 1200);
+    } else if (cameFromMenu) {
+      localStorage.removeItem("cameFromMenu");
+      setTimeout(()=> window.location.href = "menu.html", 1200);
+    } else {
+      setTimeout(()=> window.location.href = "index.html", 1200);
+    }
   }
 
   // --- Normal login ---
@@ -368,7 +381,20 @@
       localStorage.setItem("loggedIn", "true");
       sessionStorage.setItem("loggedIn", "user");
       showPopup("Welcome back ☕ Login successful!");
-      setTimeout(()=> window.location.href = "index.html", 1200);
+
+      // Check if user came from menu/cart and redirect accordingly
+      const cameFromMenu = localStorage.getItem("cameFromMenu");
+      const cameFromCart = localStorage.getItem("cameFromCart");
+
+      if (cameFromCart) {
+        localStorage.removeItem("cameFromCart");
+        setTimeout(()=> window.location.href = "cart.html", 1200);
+      } else if (cameFromMenu) {
+        localStorage.removeItem("cameFromMenu");
+        setTimeout(()=> window.location.href = "menu.html", 1200);
+      } else {
+        setTimeout(()=> window.location.href = "index.html", 1200);
+      }
     } else {
       showPopup("Invalid email or password!");
     }
