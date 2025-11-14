@@ -47,13 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
         // Check if user is logged in before opening modal
         const loggedIn = localStorage.getItem("loggedIn") === "true";
         const guest = sessionStorage.getItem("loggedIn") === "guest";
+        const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
 
-        console.log("Login check for coffee - loggedIn:", loggedIn, "guest:", guest);
+        console.log("Login check for coffee - loggedIn:", loggedIn, "guest:", guest, "socialLogin:", socialLogin);
 
-        if (!loggedIn && !guest) {
+        if (!loggedIn && !guest && !socialLogin) {
           // Redirect to login if not authenticated
           console.log("Not logged in - redirecting to login");
-          alert("Please log in to add items to cart!");
+          alert("Please log in or continue as guest to add items to cart!");
           localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
           localStorage.setItem("cameFromMenu", "true");
           window.location.href = "login.html";
@@ -140,9 +141,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // Double-check login before adding to cart
       const loggedIn = localStorage.getItem("loggedIn") === "true";
       const guest = sessionStorage.getItem("loggedIn") === "guest";
+      const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
 
-      if (!loggedIn && !guest) {
-        alert("Please log in to add items to cart!");
+      if (!loggedIn && !guest && !socialLogin) {
+        alert("Please log in or continue as guest to add items to cart!");
         modal.style.display = "none";
         localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
         window.location.href = "login.html";
@@ -187,13 +189,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // Check if user is logged in
       const loggedIn = localStorage.getItem("loggedIn") === "true";
       const guest = sessionStorage.getItem("loggedIn") === "guest";
+      const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
 
-      console.log("Login check for bakery - loggedIn:", loggedIn, "guest:", guest);
+      console.log("Login check for bakery - loggedIn:", loggedIn, "guest:", guest, "socialLogin:", socialLogin);
 
-      if (!loggedIn && !guest) {
+      if (!loggedIn && !guest && !socialLogin) {
         // Redirect to login if not authenticated
         console.log("Not logged in - redirecting to login");
-        alert("Please log in to add items to cart!");
+        alert("Please log in or continue as guest to add items to cart!");
         localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
         localStorage.setItem("cameFromMenu", "true");
         window.location.href = "login.html";
@@ -389,7 +392,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ======================================================
      🔒 LOGIN + ACCESS CONTROL LOGIC
-     Handles login, guest login, and page protection
+     Menu: Browse FREE (no login required)
+     Cart/Booking: Login REQUIRED
   ====================================================== */
 
   // --- Protect sensitive pages ---
@@ -404,18 +408,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if (protectedPages.includes(currentPage)) {
     const loggedIn = localStorage.getItem("loggedIn") === "true";
     const guest = sessionStorage.getItem("loggedIn") === "guest";
+    const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
 
-    console.log("Login check - loggedIn:", loggedIn, "guest:", guest);
+    console.log("Login check - loggedIn:", loggedIn, "guest:", guest, "socialLogin:", socialLogin);
 
-    if (!loggedIn && !guest) {
+    // Only allow if user is logged in through ANY method
+    if (!loggedIn && !guest && !socialLogin) {
       console.log("Access denied - redirecting to login");
 
       // Determine where they came from
       if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
       if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
 
-      alert("Please log in to access this page!");
-      localStorage.setItem("loginMessage", "⚠️ Please log in!");
+      alert("Please log in or continue as guest to access this page!");
+      localStorage.setItem("loginMessage", "⚠️ Please log in to continue!");
       window.location.href = "login.html";
       return;
     } else {
@@ -423,9 +429,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- Allow menu browsing but protect cart access ---
+  // --- Menu page: Allow browsing freely (no login required) ---
   if (currentPage === "menu.html") {
-    console.log("Menu page - allowing browsing");
+    console.log("Menu page - allowing free browsing without login");
   }
 
   // --- Show pop-up message after redirect ---
@@ -456,4 +462,56 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 }); // DOMContentLoaded end
+
+/* ======================================================
+   Display User Info in Navbar
+====================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+  const loginMethod = sessionStorage.getItem("loggedIn");
+  
+  if (isLoggedIn && loginMethod) {
+    let userName = "";
+    let displayMethod = "";
+    
+    if (loginMethod === "guest") {
+      userName = sessionStorage.getItem("guestName") || "Guest";
+      displayMethod = "👤 Guest";
+    } else if (loginMethod === "user") {
+      userName = sessionStorage.getItem("userName") || "User";
+      displayMethod = "📧 Email";
+    } else if (["google", "facebook", "twitter"].includes(loginMethod)) {
+      userName = sessionStorage.getItem("userName") || "User";
+      const icons = {
+        "google": "🔍",
+        "facebook": "📘",
+        "twitter": "🐦"
+      };
+      displayMethod = `${icons[loginMethod]} ${loginMethod.charAt(0).toUpperCase() + loginMethod.slice(1)}`;
+    }
+    
+    // Add user info to navbar if space allows
+    const navbar = document.querySelector(".navbar");
+    if (navbar && !document.getElementById("user-info-display")) {
+      const userInfo = document.createElement("div");
+      userInfo.id = "user-info-display";
+      userInfo.style.cssText = `
+        color: #00ff66;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-right: 15px;
+        text-align: right;
+      `;
+      userInfo.innerHTML = `<div style="font-size:0.85rem;color:#bbb;">${displayMethod}</div><div>${userName}</div>`;
+      
+      // Insert before login button if it exists
+      const loginBtn = navbar.querySelector(".login-btn");
+      if (loginBtn) {
+        navbar.insertBefore(userInfo, loginBtn);
+      } else {
+        navbar.appendChild(userInfo);
+      }
+    }
+  }
+});
 

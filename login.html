@@ -277,9 +277,9 @@
     <div class="social-login">
       <p>Or login with</p>
       <div class="social-buttons">
-        <a href="#" class="social"><img src="images/google.png" alt="Google"> Google</a>
-        <a href="#" class="social"><img src="images/facebook.png" alt="Facebook"> Facebook</a>
-        <a href="#" class="social"><img src="images/twitter.png" alt="Twitter"> Twitter</a>
+        <a href="javascript:loginWithGoogle()" class="social"><img src="images/google.png" alt="Google"> Google</a>
+        <a href="javascript:loginWithFacebook()" class="social"><img src="images/facebook.png" alt="Facebook"> Facebook</a>
+        <a href="javascript:loginWithTwitter()" class="social"><img src="images/twitter.png" alt="Twitter"> Twitter</a>
       </div>
     </div>
 
@@ -315,6 +315,71 @@
       popup.classList.remove("show");
       setTimeout(()=>popup.remove(), 500);
     }, 2000);
+  }
+
+  // --- Helper: Redirect after login ---
+  function redirectAfterLogin() {
+    const cameFromMenu = localStorage.getItem("cameFromMenu");
+    const cameFromCart = localStorage.getItem("cameFromCart");
+    const cameFromReserve = localStorage.getItem("cameFromReserve");
+
+    if (cameFromCart) {
+      localStorage.removeItem("cameFromCart");
+      setTimeout(()=> window.location.href = "cart.html", 1200);
+    } else if (cameFromReserve) {
+      localStorage.removeItem("cameFromReserve");
+      setTimeout(()=> window.location.href = "booking.html", 1200);
+    } else if (cameFromMenu) {
+      localStorage.removeItem("cameFromMenu");
+      setTimeout(()=> window.location.href = "menu.html", 1200);
+    } else {
+      setTimeout(()=> window.location.href = "index.html", 1200);
+    }
+  }
+
+  // --- Social Login: Google ---
+  function loginWithGoogle() {
+    // Simulated Google Login - In production, use Google OAuth 2.0
+    const name = prompt("Enter your Google name (simulated):");
+    if (!name) return;
+    
+    localStorage.setItem("loggedIn", "true");
+    sessionStorage.setItem("loggedIn", "google");
+    sessionStorage.setItem("userName", name);
+    sessionStorage.setItem("userProvider", "Google");
+    
+    showPopup(`👤 Welcome ${name}! Logged in with Google`);
+    redirectAfterLogin();
+  }
+
+  // --- Social Login: Facebook ---
+  function loginWithFacebook() {
+    // Simulated Facebook Login - In production, use Facebook SDK
+    const name = prompt("Enter your Facebook name (simulated):");
+    if (!name) return;
+    
+    localStorage.setItem("loggedIn", "true");
+    sessionStorage.setItem("loggedIn", "facebook");
+    sessionStorage.setItem("userName", name);
+    sessionStorage.setItem("userProvider", "Facebook");
+    
+    showPopup(`👤 Welcome ${name}! Logged in with Facebook`);
+    redirectAfterLogin();
+  }
+
+  // --- Social Login: Twitter ---
+  function loginWithTwitter() {
+    // Simulated Twitter Login - In production, use Twitter OAuth 1.0a
+    const name = prompt("Enter your Twitter handle (simulated):");
+    if (!name) return;
+    
+    localStorage.setItem("loggedIn", "true");
+    sessionStorage.setItem("loggedIn", "twitter");
+    sessionStorage.setItem("userName", name);
+    sessionStorage.setItem("userProvider", "Twitter");
+    
+    showPopup(`👤 Welcome ${name}! Logged in with Twitter`);
+    redirectAfterLogin();
   }
 
   // --- Tab switching ---
@@ -355,20 +420,7 @@
     sessionStorage.setItem("guestName", name);
     sessionStorage.setItem("guestGender", gender);
     showPopup(`Welcome ${gender === "female" ? "Miss" : "Mr"} ${name}!`);
-
-    // Check if user came from menu/cart and redirect accordingly
-    const cameFromMenu = localStorage.getItem("cameFromMenu");
-    const cameFromCart = localStorage.getItem("cameFromCart");
-
-    if (cameFromCart) {
-      localStorage.removeItem("cameFromCart");
-      setTimeout(()=> window.location.href = "cart.html", 1200);
-    } else if (cameFromMenu) {
-      localStorage.removeItem("cameFromMenu");
-      setTimeout(()=> window.location.href = "menu.html", 1200);
-    } else {
-      setTimeout(()=> window.location.href = "index.html", 1200);
-    }
+    redirectAfterLogin();
   }
 
   // --- Normal login ---
@@ -380,24 +432,38 @@
     if (email === "admin@example.com" && pass === "1234") {
       localStorage.setItem("loggedIn", "true");
       sessionStorage.setItem("loggedIn", "user");
+      sessionStorage.setItem("userName", email);
       showPopup("Welcome back ☕ Login successful!");
-
-      // Check if user came from menu/cart and redirect accordingly
-      const cameFromMenu = localStorage.getItem("cameFromMenu");
-      const cameFromCart = localStorage.getItem("cameFromCart");
-
-      if (cameFromCart) {
-        localStorage.removeItem("cameFromCart");
-        setTimeout(()=> window.location.href = "cart.html", 1200);
-      } else if (cameFromMenu) {
-        localStorage.removeItem("cameFromMenu");
-        setTimeout(()=> window.location.href = "menu.html", 1200);
-      } else {
-        setTimeout(()=> window.location.href = "index.html", 1200);
-      }
+      redirectAfterLogin();
     } else {
       showPopup("Invalid email or password!");
     }
+  });
+
+  // --- Sign up form ---
+  document.querySelector("#signupForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const inputs = document.querySelectorAll("#signupForm input");
+    const name = inputs[0].value.trim();
+    const email = inputs[1].value.trim();
+    const pass1 = inputs[2].value.trim();
+    const pass2 = inputs[3].value.trim();
+
+    if (!name || !email || !pass1 || !pass2) {
+      return showPopup("Please fill all fields!");
+    }
+    if (pass1 !== pass2) {
+      return showPopup("Passwords don't match!");
+    }
+
+    localStorage.setItem("loggedIn", "true");
+    sessionStorage.setItem("loggedIn", "user");
+    sessionStorage.setItem("userName", name);
+    showPopup(`Welcome ${name}! Account created successfully!`);
+    
+    // Clear form
+    document.querySelector("#signupForm").reset();
+    redirectAfterLogin();
   });
   </script>
 </body>
