@@ -1,6 +1,7 @@
-// main.js - unified behavior for menu/cart/checkout
+cop// main.js - unified behavior for menu/cart/checkout
 console.log("JS connected properly!");
-
+console.log("DOM ready state:", document.readyState);
+console.log("Window location:", window.location.href);
 document.addEventListener("DOMContentLoaded", () => {
   /* -------------------------
     COFFEE MODAL (only for coffee series)
