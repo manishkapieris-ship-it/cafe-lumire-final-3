@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Café Lumière | Home</title>
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Check authentication before page loads
+    (function() {
+      const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+      const isGuest = sessionStorage.getItem("loggedIn") === "guest";
+      const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
+      
+      if (!isLoggedIn && !isGuest && !socialLogin) {
+        window.location.href = "login.html";
+      }
+    })();
+  </script>
 
   <style>
     /* ===== MOBILE NAVBAR FIX ===== */
