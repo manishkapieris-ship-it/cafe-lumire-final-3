@@ -463,6 +463,7 @@
     const name = document.getElementById("guestName").value.trim();
     const gender = document.getElementById("guestGender").value;
     if (!name || !gender) return showPopup("Please enter your name & gender!");
+    localStorage.setItem("loggedIn", "true");
     sessionStorage.setItem("loggedIn", "guest");
     sessionStorage.setItem("guestName", name);
     sessionStorage.setItem("guestGender", gender);
@@ -513,5 +514,6 @@
     redirectAfterLogin();
   });
   </script>
+   <script src="Js/main.js"></script>
 </body>
 </html>
