@@ -1668,6 +1668,7 @@ body{
   background: url("../images/homeback.jpg") no-repeat center center/cover;
   z-index: -1;
   filter: brightness(0.45);
+  animation: fadeInBg 1.5s ease-in-out;
 }
 
 /* ===== HERO SECTION ===== */

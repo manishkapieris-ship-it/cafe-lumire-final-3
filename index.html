@@ -4,14 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Café Lumière | Home</title>
+  <link rel="stylesheet" href="css/style.css">
   <script>
-    // BLOCKING AUTH - MUST LOGIN FIRST
-    (function() {
-      if (localStorage.getItem("loggedIn") !== "true") {
-        window.location.replace("login.html");
-        throw new Error("Not logged in");
-      }
-    })();
+    // FORCE CHECK - Run immediately before anything else
+    var loggedIn = localStorage.getItem("loggedIn");
+    var sessionUser = sessionStorage.getItem("loggedIn");
+
+    console.log("INDEX AUTH CHECK - localStorage:", loggedIn, "sessionStorage:", sessionUser);
+
+    // Redirect if not authenticated
+    if (loggedIn !== "true" && sessionUser !== "guest" && sessionUser !== "google" && sessionUser !== "facebook" && sessionUser !== "twitter") {
+      console.log("INDEX - NOT AUTHENTICATED - REDIRECTING TO LOGIN");
+      window.location.href = "login.html";
+    }
   </script>
 
   <style>
