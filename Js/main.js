@@ -518,10 +518,11 @@ document.addEventListener("DOMContentLoaded", () => {
      🔒 LOGIN + ACCESS CONTROL LOGIC
      Menu: Browse FREE (no login required)
      Cart/Booking: Login REQUIRED
+     Index/About: Login REQUIRED (no browsing without login)
   ====================================================== */
 
   // --- Protect sensitive pages ---
-  const protectedPages = ["cart.html", "booking.html"];
+  const protectedPages = ["cart.html", "booking.html", "index.html", "about.html"];
   const currentPage = window.location.pathname.split("/").pop();
 
   // Debug logging
@@ -543,6 +544,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Determine where they came from
       if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
       if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
+      if (currentPage === "index.html") localStorage.setItem("cameFromHome", "true");
+      if (currentPage === "about.html") localStorage.setItem("cameFromAbout", "true");
 
       alert("Please log in or continue as guest to access this page!");
       localStorage.setItem("loginMessage", "⚠️ Please log in to continue!");

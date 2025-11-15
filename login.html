@@ -361,6 +361,8 @@
     const cameFromMenu = localStorage.getItem("cameFromMenu");
     const cameFromCart = localStorage.getItem("cameFromCart");
     const cameFromReserve = localStorage.getItem("cameFromReserve");
+    const cameFromHome = localStorage.getItem("cameFromHome");
+    const cameFromAbout = localStorage.getItem("cameFromAbout");
 
     if (cameFromCart) {
       localStorage.removeItem("cameFromCart");
@@ -371,6 +373,12 @@
     } else if (cameFromMenu) {
       localStorage.removeItem("cameFromMenu");
       setTimeout(()=> window.location.href = "menu.html", 1200);
+    } else if (cameFromHome) {
+      localStorage.removeItem("cameFromHome");
+      setTimeout(()=> window.location.href = "index.html", 1200);
+    } else if (cameFromAbout) {
+      localStorage.removeItem("cameFromAbout");
+      setTimeout(()=> window.location.href = "about.html", 1200);
     } else {
       setTimeout(()=> window.location.href = "index.html", 1200);
     }

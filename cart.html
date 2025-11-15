@@ -3,8 +3,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Café Lumière — Cart</title>
   <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // FORCE CHECK - Run immediately before anything else
+    var loggedIn = localStorage.getItem("loggedIn");
+    var sessionUser = sessionStorage.getItem("loggedIn");
+
+    console.log("CART AUTH CHECK - localStorage:", loggedIn, "sessionStorage:", sessionUser);
+
+    // Redirect if not authenticated
+    if (loggedIn !== "true" && sessionUser !== "guest" && sessionUser !== "google" && sessionUser !== "facebook" && sessionUser !== "twitter") {
+      console.log("CART - NOT AUTHENTICATED - REDIRECTING TO LOGIN");
+      window.location.href = "login.html";
+    }
+  </script>
 </head>
 <body>
 
