@@ -516,13 +516,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ======================================================
      🔒 LOGIN + ACCESS CONTROL LOGIC
-     Menu: Browse FREE (no login required)
-     Cart/Booking: Login REQUIRED
-     Index/About: Login REQUIRED (no browsing without login)
+     ALL PAGES REQUIRE LOGIN - No browsing without authentication
   ====================================================== */
 
-  // --- Protect sensitive pages ---
-  const protectedPages = ["cart.html", "booking.html", "index.html", "about.html"];
+  // --- Protect ALL pages ---
   const currentPage = window.location.pathname.split("/").pop();
 
   // Debug logging
@@ -530,35 +527,30 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("localStorage loggedIn:", localStorage.getItem("loggedIn"));
   console.log("sessionStorage loggedIn:", sessionStorage.getItem("loggedIn"));
 
-  if (protectedPages.includes(currentPage)) {
-    const loggedIn = localStorage.getItem("loggedIn") === "true";
-    const guest = sessionStorage.getItem("loggedIn") === "guest";
-    const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
+  // Check if user is authenticated
+  const loggedIn = localStorage.getItem("loggedIn") === "true";
+  const guest = sessionStorage.getItem("loggedIn") === "guest";
+  const socialLogin = ["google", "facebook", "twitter"].includes(sessionStorage.getItem("loggedIn"));
 
-    console.log("Login check - loggedIn:", loggedIn, "guest:", guest, "socialLogin:", socialLogin);
+  console.log("Login check - loggedIn:", loggedIn, "guest:", guest, "socialLogin:", socialLogin);
 
-    // Only allow if user is logged in through ANY method
-    if (!loggedIn && !guest && !socialLogin) {
-      console.log("Access denied - redirecting to login");
+  // Only allow if user is logged in through ANY method
+  if (!loggedIn && !guest && !socialLogin) {
+    console.log("Access denied - redirecting to login");
 
-      // Determine where they came from
-      if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
-      if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
-      if (currentPage === "index.html") localStorage.setItem("cameFromHome", "true");
-      if (currentPage === "about.html") localStorage.setItem("cameFromAbout", "true");
+    // Determine where they came from (for redirect after login)
+    if (currentPage === "cart.html") localStorage.setItem("cameFromCart", "true");
+    if (currentPage === "booking.html") localStorage.setItem("cameFromReserve", "true");
+    if (currentPage === "index.html") localStorage.setItem("cameFromHome", "true");
+    if (currentPage === "about.html") localStorage.setItem("cameFromAbout", "true");
+    if (currentPage === "menu.html") localStorage.setItem("cameFromMenu", "true");
 
-      alert("Please log in or continue as guest to access this page!");
-      localStorage.setItem("loginMessage", "⚠️ Please log in to continue!");
-      window.location.href = "login.html";
-      return;
-    } else {
-      console.log("Access granted");
-    }
-  }
-
-  // --- Menu page: Allow browsing freely (no login required) ---
-  if (currentPage === "menu.html") {
-    console.log("Menu page - allowing free browsing without login");
+    alert("Please log in or continue as guest to access this page!");
+    localStorage.setItem("loginMessage", "⚠️ Please log in to continue!");
+    window.location.href = "login.html";
+    return;
+  } else {
+    console.log("Access granted");
   }
 
   // --- Show pop-up message after redirect ---

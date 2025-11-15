@@ -8,7 +8,19 @@
   <meta http-equiv="Expires" content="0" />
   <title>Café Lumière — Menu</title>
   <link rel="stylesheet" href="css/style.css" />
+  <script>
+    // FORCE CHECK - Run immediately before anything else
+    var loggedIn = localStorage.getItem("loggedIn");
+    var sessionUser = sessionStorage.getItem("loggedIn");
 
+    console.log("MENU AUTH CHECK - localStorage:", loggedIn, "sessionStorage:", sessionUser);
+
+    // Redirect if not authenticated
+    if (loggedIn !== "true" && sessionUser !== "guest" && sessionUser !== "google" && sessionUser !== "facebook" && sessionUser !== "twitter") {
+      console.log("MENU - NOT AUTHENTICATED - REDIRECTING TO LOGIN");
+      window.location.href = "login.html";
+    }
+  </script>
 
 </head>
 <body>
