@@ -170,12 +170,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!loggedIn && !guest && !socialLogin) {
           // Redirect to login if not authenticated
           console.log("Not logged in - redirecting to login");
-          
-          // Show login required message
-          showLoginRequiredModal(() => {
-            localStorage.setItem("cameFromMenu", "true");
-            window.location.href = "login.html";
-          });
+          localStorage.setItem("cameFromMenu", "true");
+          localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
+          window.location.href = "login.html";
           return;
         }
 
@@ -318,12 +315,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!loggedIn && !guest && !socialLogin) {
         // Redirect to login if not authenticated
         console.log("Not logged in - redirecting to login");
-        
-        // Show login required message
-        showLoginRequiredModal(() => {
-          localStorage.setItem("cameFromMenu", "true");
-          window.location.href = "login.html";
-        });
+        localStorage.setItem("cameFromMenu", "true");
+        localStorage.setItem("loginMessage", "⚠️ Please log in before adding items to cart!");
+        window.location.href = "login.html";
         return;
       }
 
