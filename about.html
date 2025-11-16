@@ -4,15 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About | Café Lumière</title>
-  <script>
-    // BLOCKING AUTH - MUST LOGIN FIRST
-    (function() {
-      if (localStorage.getItem("loggedIn") !== "true") {
-        window.location.replace("login.html");
-        throw new Error("Not logged in");
-      }
-    })();
-  </script>
+
   <style>
     /* Basic setup */
     body.about-page {
